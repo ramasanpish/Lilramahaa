@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>★ RAMA'S CORNER OF THE WEB ★</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+  :root {
+    --lime: #b8ff00;
+    --hot: #ff2d78;
+    --cyan: #00ffe7;
+    --purple: #9b00ff;
+    --darker: #050505;
+    --cream: #f0e6c8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--darker);
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(184,255,0,0.025) 30px, rgba(184,255,0,0.025) 31px),
+      repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(184,255,0,0.025) 30px, rgba(184,255,0,0.025) 31px);
+    font-family: 'Courier Prime', monospace;
+    color: var(--cream);
+    min-height: 100vh;
+    cursor: crosshair;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ======= HERO ======= */
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 3px;
+  }
+
+  .hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.55) brightness(0.4);
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(5,5,5,0.15) 0%, rgba(5,5,5,0.45) 55%, rgba(5,5,5,1) 100%);
+    z-index: 2;
+  }
+
+  .hero-content {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .site-title {
+    font-family: 'VT323', monospace;
+    font-size: clamp(56px, 12vw, 110px);
+    color: var(--lime);
+    text-shadow: 4px 4px 0 var(--hot), 0 0 40px rgba(184,255,0,0.35);
+    letter-spacing: 6px;
+    line-height: 1;
+    animation: glitch-title 6s step-end infinite;
+  }
+
+  @keyframes glitch-title {
+    0%,92%,100% { text-shadow: 4px 4px 0 var(--hot), 0 0 40px rgba(184,255,0,0.35); transform: none; }
+    93% { text-shadow: -3px 0 var(--cyan), 3px 0 var(--hot); transform: translateX(-2px); }
+    94% { text-shadow: 3px 0 var(--purple), -3px 0 var(--lime); transform: translateX(2px); }
+    95% { text-shadow: 4px 4px 0 var(--hot), 0 0 40px rgba(184,255,0,0.35); transform: none; }
+  }
+
+  .site-subtitle {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(6px, 1.8vw, 10px);
+    color: var(--cyan);
+    margin-top: 14px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 10px var(--cyan);
+  }
+
+  .hero-gifs {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero-gifs img {
+    height: 55px;
+    width: auto;
+    border: 1px solid rgba(184,255,0,0.35);
+  }
+
+  /* ======= MARQUEE ======= */
+  .marquee-wrap {
+    background: var(--hot);
+    padding: 7px 0;
+    overflow: hidden;
+  }
+  .marquee-inner {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee 22s linear infinite;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: #000;
+    letter-spacing: 2px;
+  }
+  @keyframes marquee { from{transform:translateX(100vw)} to{transform:translateX(-100%)} }
+
+  /* ======= NAV ======= */
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    padding: 18px 15px;
+    background: rgba(0,0,0,0.85);
+    border-bottom: 1px solid rgba(184,255,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  nav a {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #000;
+    background: var(--lime);
+    padding: 8px 12px;
+    text-decoration: none;
+    border: 2px solid #000;
+    box-shadow: 3px 3px 0 #000;
+    transition: all 0.1s;
+    letter-spacing: 1px;
+  }
+  nav a:hover {
+    background: var(--hot);
+    color: #fff;
+    transform: translate(-2px,-2px);
+    box-shadow: 5px 5px 0 #000;
+  }
+
+  .wrapper { max-width: 900px; margin: 0 auto; padding: 25px 15px; }
+
+  /* ======= LAYOUT ======= */
+  .main-layout {
+    display: grid;
+    grid-template-columns: 1fr 230px;
+    gap: 20px;
+    align-items: start;
+  }
+  @media(max-width:640px) { .main-layout { grid-template-columns: 1fr; } }
+
+  /* ======= BOX ======= */
+  .box {
+    border: 2px solid var(--lime);
+    padding: 16px;
+    margin-bottom: 20px;
+    position: relative;
+    background: rgba(0,0,0,0.7);
+  }
+  .box::after {
+    content: '';
+    position: absolute;
+    top: 4px; left: 4px; right: -4px; bottom: -4px;
+    border: 1px solid rgba(184,255,0,0.12);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .box-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: var(--hot);
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--hot);
+  }
+
+  /* ======= PHOTO STRIP ======= */
+  .photo-strip {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 22px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--lime) #111;
+  }
+  .photo-strip img {
+    height: 130px;
+    width: auto;
+    flex-shrink: 0;
+    border: 2px solid rgba(184,255,0,0.2);
+    object-fit: cover;
+    filter: saturate(0.75);
+    transition: filter 0.2s, transform 0.2s, border-color 0.2s;
+    cursor: zoom-in;
+  }
+  .photo-strip img:hover {
+    filter: saturate(1.3);
+    transform: scale(1.06) translateY(-5px);
+    border-color: var(--lime);
+    z-index: 10;
+    position: relative;
+  }
+
+  /* ======= ABOUT ======= */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media(max-width:500px) { .about-grid { grid-template-columns: 1fr; } }
+
+  .about-img-stack { display: flex; flex-direction: column; gap: 6px; }
+  .about-img-stack img {
+    width: 100%;
+    object-fit: cover;
+    border: 2px solid var(--purple);
+    filter: saturate(0.65);
+    cursor: zoom-in;
+  }
+  .gif-row { display: flex; gap: 5px; }
+  .gif-row img { flex: 1; width: 0; height: auto; }
+
+  .about-text { font-size: 14px; line-height: 1.8; color: var(--cream); }
+  .about-text strong { color: var(--lime); }
+  .about-text a { color: var(--cyan); text-decoration: none; border-bottom: 1px solid var(--cyan); }
+  .about-text a:hover { color: var(--hot); border-color: var(--hot); }
+
+  /* ======= FINDS ======= */
+  .find-entry {
+    margin-bottom: 22px;
+    padding-bottom: 22px;
+    border-bottom: 1px dotted rgba(184,255,0,0.2);
+    transition: opacity 0.8s, max-height 0.8s;
+  }
+  .find-entry:last-child { border-bottom: none; margin-bottom: 0; }
+
+  .find-header { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+
+  .find-date { font-family: 'VT323', monospace; font-size: 15px; color: #555; letter-spacing: 1px; }
+  .find-type { font-family: 'Press Start 2P', monospace; font-size: 6px; padding: 3px 7px; letter-spacing: 1px; }
+  .find-type.music { background: var(--purple); color: #fff; }
+  .find-type.art   { background: var(--cyan);   color: #000; }
+  .find-type.playlist { background: var(--hot); color: #fff; }
+
+  .find-title { font-family: 'VT323', monospace; font-size: 30px; color: var(--lime); line-height: 1.1; }
+
+  .find-img {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+    margin: 10px 0;
+    border: 2px solid rgba(184,255,0,0.18);
+    filter: saturate(0.7);
+    transition: filter 0.3s;
+    cursor: zoom-in;
+  }
+  .find-img:hover { filter: saturate(1.2); }
+
+  .find-desc { font-size: 13px; color: #aaa; line-height: 1.65; font-style: italic; }
+  .find-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px solid var(--cyan);
+    letter-spacing: 1px;
+  }
+  .find-link:hover { color: var(--hot); border-color: var(--hot); }
+
+  /* ======= GALLERY ======= */
+  .gallery-grid {
+    columns: 2;
+    gap: 6px;
+  }
+  .gallery-grid img {
+    width: 100%;
+    margin-bottom: 6px;
+    display: block;
+    break-inside: avoid;
+    border: 2px solid rgba(184,255,0,0.12);
+    filter: saturate(0.6) brightness(0.88);
+    transition: filter 0.25s, border-color 0.25s;
+    cursor: zoom-in;
+  }
+  .gallery-grid img:hover {
+    filter: saturate(1.15) brightness(1.05);
+    border-color: var(--lime);
+    z-index: 5;
+    position: relative;
+  }
+
+  /* ======= LIGHTBOX ======= */
+  #lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.94);
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+  }
+  #lightbox.open { display: flex; }
+  #lightbox img {
+    max-width: 92vw;
+    max-height: 92vh;
+    object-fit: contain;
+    border: 2px solid var(--lime);
+    box-shadow: 0 0 40px rgba(184,255,0,0.2);
+  }
+  #lb-close {
+    position: absolute;
+    top: 18px; right: 22px;
+    font-family: 'VT323', monospace;
+    font-size: 46px;
+    color: var(--lime);
+    cursor: pointer;
+    line-height: 1;
+    z-index: 100000;
+  }
+
+  /* ======= SIDEBAR ======= */
+  .sidebar .box { border-color: var(--hot); }
+
+  .hit-counter {
+    font-family: 'VT323', monospace;
+    font-size: 42px;
+    color: var(--lime);
+    text-align: center;
+    letter-spacing: 6px;
+    display: block;
+    margin: 4px 0;
+    text-shadow: 0 0 12px var(--lime);
+  }
+  .counter-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 6px;
+    color: #555;
+    text-align: center;
+  }
+
+  .sidebar-img {
+    width: 100%;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 10px;
+    filter: saturate(0.65);
+    cursor: zoom-in;
+  }
+
+  .status-item { display: flex; gap: 8px; margin-bottom: 9px; font-size: 12px; line-height: 1.5; }
+  .dl { color: var(--lime);   flex-shrink: 0; }
+  .dh { color: var(--hot);    flex-shrink: 0; }
+  .dc { color: var(--cyan);   flex-shrink: 0; }
+
+  .link-list a {
+    display: block;
+    font-family: 'VT323', monospace;
+    font-size: 21px;
+    color: var(--cyan);
+    text-decoration: none;
+    padding: 3px 0;
+    border-bottom: 1px dotted rgba(0,255,231,0.18);
+    transition: color 0.1s, padding-left 0.1s;
+  }
+  .link-list a:hover { color: var(--hot); padding-left: 8px; }
+  .link-list a::before { content: '» '; }
+
+  /* ======= GUESTBOOK ======= */
+  .gb-entry {
+    border-left: 3px solid var(--purple);
+    padding-left: 12px;
+    margin-bottom: 15px;
+  }
+  .gb-name { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--lime); }
+  .gb-msg  { font-size: 13px; color: #aaa; margin-top: 5px; font-style: italic; line-height: 1.5; }
+  .gb-date { font-family: 'VT323', monospace; font-size: 14px; color: #3a3a3a; margin-top: 3px; }
+
+  .gb-form input, .gb-form textarea {
+    width: 100%;
+    background: #0d0d0d;
+    border: 1px solid var(--lime);
+    color: var(--cream);
+    padding: 8px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 13px;
+    margin-bottom: 8px;
+    outline: none;
+  }
+  .gb-form input:focus, .gb-form textarea:focus { border-color: var(--hot); }
+  .gb-form textarea { resize: vertical; min-height: 60px; }
+
+  .btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    background: var(--lime);
+    color: #000;
+    border: 2px solid #000;
+    box-shadow: 3px 3px 0 #000;
+    padding: 9px 14px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.1s;
+  }
+  .btn:hover { background: var(--hot); color: #fff; transform: translate(-1px,-1px); box-shadow: 4px 4px 0 #000; }
+
+  .divider { font-family: 'VT323', monospace; font-size: 20px; color: rgba(184,255,0,0.15); text-align: center; overflow: hidden; }
+
+  .blink { animation: blink 1.1s step-end infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  footer { text-align: center; padding: 28px 15px 40px; }
+  .footer-text { font-family: 'VT323', monospace; font-size: 18px; color: #3a3a3a; letter-spacing: 2px; line-height: 2.3; }
+  .footer-text a { color: var(--purple); text-decoration: none; }
+  .footer-text a:hover { color: var(--hot); }
+
+  section { scroll-margin-top: 80px; }
+
+  /* ======= PLAYLIST SUGGESTIONS ======= */
+  .suggestion-form {
+    background: rgba(0,0,0,0.5);
+    border: 1px dashed rgba(184,255,0,0.3);
+    padding: 14px;
+    margin-top: 18px;
+  }
+  .suggestion-form input, .suggestion-form textarea, .suggestion-form select {
+    width: 100%;
+    background: #0d0d0d;
+    border: 1px solid rgba(184,255,0,0.4);
+    color: var(--cream);
+    padding: 8px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 13px;
+    margin-bottom: 8px;
+    outline: none;
+  }
+  .suggestion-form input:focus, .suggestion-form textarea:focus, .suggestion-form select:focus {
+    border-color: var(--cyan);
+  }
+  .suggestion-form select option { background: #111; color: var(--cream); }
+  .suggestion-form textarea { resize: vertical; min-height: 55px; }
+
+  .sugg-list { margin-top: 16px; }
+  .sugg-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid rgba(184,255,0,0.15);
+    margin-bottom: 8px;
+    background: rgba(0,0,0,0.4);
+    animation: fadeIn 0.4s ease;
+    position: relative;
+  }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+  .sugg-type-badge {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 6px;
+    padding: 3px 6px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .sugg-type-badge.music { background: var(--purple); color: #fff; }
+  .sugg-type-badge.art   { background: var(--cyan); color: #000; }
+  .sugg-type-badge.playlist { background: var(--hot); color: #fff; }
+  .sugg-type-badge.other { background: #333; color: var(--lime); }
+
+  .sugg-content { flex: 1; }
+  .sugg-title { font-family: 'VT323', monospace; font-size: 22px; color: var(--lime); line-height: 1.1; }
+  .sugg-by { font-size: 11px; color: #555; font-style: italic; margin-top: 2px; }
+  .sugg-note { font-size: 12px; color: #888; margin-top: 4px; line-height: 1.5; }
+  .sugg-link { font-family: 'Press Start 2P', monospace; font-size: 6px; color: var(--cyan); text-decoration: none; margin-top: 6px; display: inline-block; }
+  .sugg-link:hover { color: var(--hot); }
+  .sugg-meta { font-family: 'VT323', monospace; font-size: 13px; color: #2a2a2a; margin-top: 4px; }
+
+  /* auto-delete countdown bar */
+  .sugg-expire-bar {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    background: var(--hot);
+    transition: width linear;
+  }
+
+  .vote-btn {
+    background: none;
+    border: 1px solid rgba(184,255,0,0.25);
+    color: var(--lime);
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    padding: 2px 8px;
+    cursor: pointer;
+    transition: all 0.1s;
+    margin-right: 4px;
+  }
+  .vote-btn:hover { background: rgba(184,255,0,0.12); border-color: var(--lime); }
+  .vote-count { font-family: 'VT323', monospace; font-size: 16px; color: #888; }
+
+  /* ======= BLOG ======= */
+  .blog-post {
+    margin-bottom: 28px;
+    padding-bottom: 28px;
+    border-bottom: 1px dotted rgba(184,255,0,0.2);
+  }
+  .blog-post:last-child { border-bottom: none; margin-bottom: 0; }
+  .blog-date {
+    font-family: 'VT323', monospace;
+    font-size: 15px;
+    color: #555;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .blog-title {
+    font-family: 'VT323', monospace;
+    font-size: 34px;
+    color: var(--lime);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .blog-cover {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    margin: 10px 0;
+    border: 2px solid rgba(184,255,0,0.18);
+    filter: saturate(0.7);
+    transition: filter 0.3s;
+    cursor: zoom-in;
+  }
+  .blog-cover:hover { filter: saturate(1.2); }
+  .blog-tags { margin-bottom: 8px; }
+  .blog-tag {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 5px;
+    padding: 3px 7px;
+    letter-spacing: 1px;
+    display: inline-block;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    background: var(--purple);
+    color: #fff;
+  }
+  .blog-body {
+    font-size: 14px;
+    color: #bbb;
+    line-height: 1.8;
+  }
+  .blog-body strong { color: var(--lime); }
+  .blog-body a { color: var(--cyan); text-decoration: none; border-bottom: 1px solid var(--cyan); }
+  .blog-body a:hover { color: var(--hot); border-color: var(--hot); }
+  .blog-body p { margin-bottom: 12px; }
+  .blog-body blockquote {
+    border-left: 3px solid var(--purple);
+    padding-left: 12px;
+    color: #888;
+    font-style: italic;
+    margin: 12px 0;
+  }
+  .blog-read-more {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px solid var(--cyan);
+    letter-spacing: 1px;
+    cursor: pointer;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    padding: 0;
+  }
+  .blog-read-more:hover { color: var(--hot); border-color: var(--hot); }
+  .blog-body.collapsed {
+    max-height: 200px;
+    overflow: hidden;
+    position: relative;
+  }
+  .blog-body.collapsed::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.9));
+    pointer-events: none;
+  }
+
+  /* ======= CHAT SECTION ======= */
+  #chat {
+    scroll-margin-top: 80px;
+  }
+  .chat-iframe-wrap {
+    border: 2px solid var(--purple);
+    overflow: hidden;
+    position: relative;
+    background: #000;
+    height: 500px;
+  }
+  .chat-iframe-wrap iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  /* ======= ARCHIVE ======= */
+  .archive-month { margin-bottom: 18px; }
+  .archive-month-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--purple);
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(155,0,255,0.2);
+  }
+  .archive-entry-link {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    padding: 4px 0;
+    border-bottom: 1px dotted rgba(255,255,255,0.04);
+    text-decoration: none;
+    transition: padding-left 0.1s;
+  }
+  .archive-entry-link:hover { padding-left: 6px; }
+  .archive-entry-link .ae-date { font-family: 'VT323', monospace; font-size: 14px; color: #444; flex-shrink: 0; }
+  .archive-entry-link .ae-title { font-family: 'VT323', monospace; font-size: 18px; color: var(--cream); }
+  .archive-entry-link .ae-type { font-family: 'Press Start 2P', monospace; font-size: 5px; padding: 2px 5px; flex-shrink: 0; }
+  .archive-entry-link .ae-type.music { background: var(--purple); color: #fff; }
+  .archive-entry-link .ae-type.art { background: var(--cyan); color: #000; }
+  .archive-entry-link .ae-type.playlist { background: var(--hot); color: #fff; }
+
+  /* ======= TOAST ======= */
+  #toast {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    background: var(--lime);
+    color: #000;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    padding: 12px 16px;
+    border: 2px solid #000;
+    box-shadow: 4px 4px 0 #000;
+    z-index: 99998;
+    display: none;
+    max-width: 260px;
+    line-height: 1.6;
+    letter-spacing: 1px;
+  }
+  #toast.show { display: block; animation: slideUp 0.3s ease; }
+  @keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:none;opacity:1} }
+</style>
+</head>
+<body>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <span id="lb-close">✕</span>
+  <img id="lb-img" src="" alt="">
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg">
+    <img src="https://vault.pictures/media/images/22/aa/87/22aa87f14a30480982aa6d7fdc62b24d.jpg" alt="">
+    <img src="https://vault.pictures/media/images/c4/02/19/c4021967fd364a1eacd6ff708fd70ec1.jpg" alt="">
+    <img src="https://vault.pictures/media/images/f2/fa/8f/f2fa8f7f90494d79bcfcbc957558a52d.jpg" alt="">
+    <img src="https://vault.pictures/media/images/be/75/b8/be75b8bedb714cedb7707a34943cd287.jpg" alt="">
+    <img src="https://vault.pictures/media/images/bf/7a/e7/bf7ae7d6905e4f4f86a6eb0ced66a6bf.jpg" alt="">
+    <img src="https://vault.pictures/media/images/10/e7/5b/10e75ba3cc7746bcabe02eba6ebd878b.jpg" alt="">
+    <img src="https://vault.pictures/media/images/21/54/7f/21547f634ca04c2c988858b9b572e2c4.jpg" alt="">
+    <img src="https://vault.pictures/media/images/1c/07/25/1c07258e377745e88cae14893db7779a.jpg" alt="">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="site-title">RAMA'S CORNER</div>
+    <div class="site-subtitle">★ MUSIC &amp; ART FOUND DAILY ★ HOSTED ON AN OLD PHONE ★</div>
+    <div class="hero-gifs">
+      <img src="https://ar-hosting.pages.dev/1771694391053.jpg" alt="">
+      <img src="https://ar-hosting.pages.dev/1771694392611.jpg" alt="">
+      <img src="https://ar-hosting.pages.dev/1771694391849.jpg" alt="">
+    </div>
+  </div>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <span class="marquee-inner" id="marquee-text">✦ WELCOME TO MY CORNER OF THE INTERNET ✦ MUSIC &amp; ART POSTED DAILY ✦ NO ALGORITHM DECIDES WHAT GOES HERE ✦ CHECK OUT LILRAMAHAA ON SOUNDCLOUD ✦ HOSTED ON AN OLD PHONE ✦ REAL PAGES FOR REAL PEOPLE ✦ @RAMASENPAII ON INSTAGRAM ✦</span>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#today">TODAY'S FINDS</a>
+  <a href="#blog">BLOG</a>
+  <a href="#about">ABOUT ME</a>
+  <a href="#gallery">GALLERY</a>
+  <a href="#archive">ARCHIVE</a>
+  <a href="#suggestions">SUGGEST</a>
+  <a href="#chat">CHAT</a>
+  <a href="#guestbook">GUESTBOOK</a>
+  <a href="https://soundcloud.com/lilramahaa" target="_blank">★ SOUNDCLOUD</a>
+  <a href="https://www.instagram.com/ramasenpaii" target="_blank">INSTAGRAM</a>
+</nav>
+
+<div class="wrapper">
+
+  <!-- SCROLLABLE PHOTO STRIP -->
+  <div class="photo-strip" id="photo-strip">
+    <img src="https://vault.pictures/media/images/22/aa/87/22aa87f14a30480982aa6d7fdc62b24d.jpg"  alt="" onclick="lb(this.src)">
+    <img src="https://vault.pictures/media/images/c4/02/19/c4021967fd364a1eacd6ff708fd70ec1.jpg"  alt="" onclick="lb(this.src)">
+    <img src="https://vault.pictures/media/images/f2/fa/8f/f2fa8f7f90494d79bcfcbc957558a52d.jpg"  alt="" onclick="lb(this.src)">
+    <img src="https://vault.pictures/media/images/be/75/b8/be75b8bedb714cedb7707a34943cd287.jpg"  alt="" onclick="lb(this.src)">
+    <img src="https://vault.pictures/media/images/bf/7a/e7/bf7ae7d6905e4f4f86a6eb0ced66a6bf.jpg"  alt="" onclick="lb(this.src)">
+    <img src="https://vault.pictures/media/images/10/e7/5b/10e75ba3cc7746bcabe02eba6ebd878b.jpg"  alt="" onclick="lb(this.src)">
+    <img src="https://vault.pictures/media/images/21/54/7f/21547f634ca04c2c988858b9b572e2c4.jpg"  alt="" onclick="lb(this.src)">
+    <img src="https://vault.pictures/media/images/1c/07/25/1c07258e377745e88cae14893db7779a.jpg"  alt="" onclick="lb(this.src)">
+    <img src="https://vault.pictures/media/images/b4/72/9c/b4729cab55ee41a4a5768843c35f3655.jpg"  alt="" onclick="lb(this.src)">
+    <img src="https://vault.pictures/media/images/62/e1/e8/62e1e8903e5e4d00856507c3a267eea1.jpg"  alt="" onclick="lb(this.src)">
+    <img src="https://vault.pictures/media/images/1e/94/ed/1e94ed2af8de4c15a2a51f5932009d19.jpg"  alt="" onclick="lb(this.src)">
+    <img src="https://vault.pictures/media/images/1c/66/c1/1c66c16a68144d6a8cf35d95e363edf9.jpg"  alt="" onclick="lb(this.src)">
+    <img src="https://ar-hosting.pages.dev/1771694391053.jpg" alt="" onclick="lb(this.src)">
+    <img src="https://ar-hosting.pages.dev/1771694392611.jpg" alt="" onclick="lb(this.src)">
+    <img src="https://ar-hosting.pages.dev/1771694391849.jpg" alt="" onclick="lb(this.src)">
+  </div>
+
+  <div class="main-layout">
+    <main>
+
+      <!-- TODAY'S FINDS -->
+      <section id="today">
+        <div class="box">
+          <div class="box-title">★ TODAY'S FINDS — <span class="blink">LIVE</span></div>
+          <div id="finds-list">
+            <!-- populated by JS from localStorage / admin data -->
+          </div>
+        </div>
+      </section>
+
+      <!-- BLOG -->
+      <section id="blog">
+        <div class="box" style="border-color:var(--hot);">
+          <div class="box-title" style="color:var(--hot);">★ BLOG — THOUGHTS &amp; WORDS</div>
+          <div id="blog-list">
+            <!-- populated by JS from localStorage / admin data -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about">
+        <div class="box">
+          <div class="box-title">★ ABOUT ME</div>
+          <div class="about-grid">
+            <div class="about-img-stack">
+              <img src="https://vault.pictures/media/images/be/75/b8/be75b8bedb714cedb7707a34943cd287.jpg" alt="" onclick="lb(this.src)">
+              <img src="https://vault.pictures/media/images/1e/94/ed/1e94ed2af8de4c15a2a51f5932009d19.jpg" alt="" onclick="lb(this.src)">
+              <div class="gif-row">
+                <img src="https://ar-hosting.pages.dev/1771694391053.jpg" alt="">
+                <img src="https://ar-hosting.pages.dev/1771694392611.jpg" alt="">
+                <img src="https://ar-hosting.pages.dev/1771694391849.jpg" alt="">
+              </div>
+            </div>
+            <p class="about-text" id="about-text">
+              hey. i'm <strong>rama</strong>.<br>
+              also known as <strong>lilramahaa</strong>.<br><br>
+              i make music. i find music. i find art. every day something new lands in front of me and i put it here.<br><br>
+              this site runs off an old phone. no cloud. no servers. just a device that probably shouldn't work anymore, keeping this thing alive.<br><br>
+              find me on <a href="https://soundcloud.com/lilramahaa" target="_blank">soundcloud</a> and <a href="https://www.instagram.com/ramasenpaii" target="_blank">instagram @ramasenpaii</a>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- GALLERY -->
+      <section id="gallery">
+        <div class="box">
+          <div class="box-title">★ GALLERY — click to open</div>
+          <div class="gallery-grid" id="gallery-grid">
+            <img src="https://vault.pictures/media/images/10/e7/5b/10e75ba3cc7746bcabe02eba6ebd878b.jpg" alt="" onclick="lb(this.src)">
+            <img src="https://vault.pictures/media/images/1e/94/ed/1e94ed2af8de4c15a2a51f5932009d19.jpg" alt="" onclick="lb(this.src)">
+            <img src="https://vault.pictures/media/images/21/54/7f/21547f634ca04c2c988858b9b572e2c4.jpg" alt="" onclick="lb(this.src)">
+            <img src="https://vault.pictures/media/images/1c/07/25/1c07258e377745e88cae14893db7779a.jpg" alt="" onclick="lb(this.src)">
+            <img src="https://vault.pictures/media/images/b4/72/9c/b4729cab55ee41a4a5768843c35f3655.jpg" alt="" onclick="lb(this.src)">
+            <img src="https://vault.pictures/media/images/62/e1/e8/62e1e8903e5e4d00856507c3a267eea1.jpg" alt="" onclick="lb(this.src)">
+            <img src="https://vault.pictures/media/images/1c/66/c1/1c66c16a68144d6a8cf35d95e363edf9.jpg" alt="" onclick="lb(this.src)">
+            <img src="https://vault.pictures/media/images/bf/7a/e7/bf7ae7d6905e4f4f86a6eb0ced66a6bf.jpg" alt="" onclick="lb(this.src)">
+          </div>
+        </div>
+      </section>
+
+      <!-- ARCHIVE -->
+      <section id="archive">
+        <div class="box">
+          <div class="box-title">★ ARCHIVE</div>
+          <div id="archive-content">
+            <p style="font-size:13px;color:#555;font-style:italic;line-height:1.8;">
+              Every daily find will be catalogued here by month.<br>
+              <span class="blink" style="color:var(--lime)">█</span> loading history...
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUGGESTIONS -->
+      <section id="suggestions">
+        <div class="box" style="border-color:var(--cyan)">
+          <div class="box-title" style="color:var(--cyan);">★ SUGGEST A FIND — MUSIC, ART, PLAYLIST</div>
+          <p style="font-size:12px;color:#666;font-style:italic;margin-bottom:14px;line-height:1.6;">drop anything here — a track, album, painting, playlist, whatever. i'll check it. suggestions auto-delete after 48hrs.</p>
+
+          <div class="sugg-list" id="sugg-list">
+            <!-- rendered by JS -->
+          </div>
+
+          <div class="suggestion-form">
+            <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:var(--lime);margin-bottom:12px;letter-spacing:1px;">LEAVE A SUGGESTION →</div>
+            <input type="text" id="sugg-name" placeholder="your name or alias (optional)">
+            <select id="sugg-type">
+              <option value="music">MUSIC TRACK / ALBUM</option>
+              <option value="playlist">PLAYLIST</option>
+              <option value="art">ART PIECE</option>
+              <option value="other">OTHER</option>
+            </select>
+            <input type="text" id="sugg-title" placeholder="title — artist / track name / artwork title">
+            <input type="text" id="sugg-link" placeholder="link (soundcloud, youtube, spotify, image url...)">
+            <textarea id="sugg-note" placeholder="why are you suggesting this? what does it feel like?"></textarea>
+            <button class="btn" onclick="submitSugg()">SEND SUGGESTION →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- CHAT -->
+      <section id="chat">
+        <div class="box" style="border-color:var(--purple);padding:0;overflow:hidden;">
+          <div class="box-title" style="margin:0;padding:16px 16px 10px;color:var(--purple);">★ LIVE CHAT — TALK TO VISITORS</div>
+          <div class="chat-iframe-wrap">
+            <iframe 
+              src="https://chitchatter.im/public/1c33be8b-ce8d-4138-9909-54e66bf208ce?embed=1"
+              allow="camera;microphone;display-capture;fullscreen"
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="box">
+        <div class="box-title">VISITORS</div>
+        <span class="hit-counter" id="counter">000042</span>
+        <div class="counter-label">HITS SINCE LAUNCH</div>
+      </div>
+
+      <div class="box">
+        <div class="box-title">NOW PLAYING</div>
+        <img class="sidebar-img" id="now-playing-img" src="https://vault.pictures/media/images/b4/72/9c/b4729cab55ee41a4a5768843c35f3655.jpg" alt="" onclick="lb(this.src)">
+        <div id="now-playing-text" style="font-family:'VT323',monospace;font-size:20px;color:var(--lime);line-height:1.5;">♪ update this with<br>whatever you're<br>into right now</div>
+      </div>
+
+      <div class="box">
+        <div class="box-title">STATUS</div>
+        <div id="status-list">
+          <div class="status-item"><span class="dl">●</span><span>hunting for new sounds</span></div>
+          <div class="status-item"><span class="dl">●</span><span>posting from an old phone</span></div>
+          <div class="status-item"><span class="dh">●</span><span>making music on soundcloud</span></div>
+          <div class="status-item"><span class="dc">●</span><span>@ramasenpaii on instagram</span></div>
+        </div>
+      </div>
+
+      <div class="box" style="padding:0;overflow:hidden;border-color:var(--purple);">
+        <img src="https://vault.pictures/media/images/62/e1/e8/62e1e8903e5e4d00856507c3a267eea1.jpg" style="width:100%;display:block;filter:saturate(0.55);" alt="" onclick="lb(this.src)">
+      </div>
+
+      <div class="box">
+        <div class="box-title">MY LINKS</div>
+        <div class="link-list">
+          <a href="https://soundcloud.com/lilramahaa" target="_blank">SoundCloud</a>
+          <a href="https://www.instagram.com/ramasenpaii" target="_blank">Instagram</a>
+          <a href="#today">Today's finds</a>
+          <a href="#blog">Blog</a>
+          <a href="#suggestions">Suggest</a>
+          <a href="#chat">Live Chat</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#guestbook">Guestbook</a>
+        </div>
+      </div>
+
+      <div class="box" style="border-color:var(--purple);">
+        <div class="box-title" style="color:var(--purple);">WEB RING</div>
+        <p style="font-size:12px;color:#555;font-style:italic;line-height:1.65;">
+          part of the indie web. no big platforms. just real people with real sites on old phones.
+        </p>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- GUESTBOOK -->
+  <section id="guestbook">
+    <div class="box">
+      <div class="box-title">★ GUESTBOOK — LEAVE A MESSAGE</div>
+
+      <div id="gb-list" style="margin-bottom:22px;">
+        <!-- populated by JS -->
+      </div>
+
+      <div class="gb-form">
+        <div class="box-title" style="font-size:6px;margin-bottom:12px;">SIGN THE BOOK</div>
+        <input type="text" id="gb-name" placeholder="your name or alias">
+        <textarea id="gb-msg" placeholder="leave your message for rama..."></textarea>
+        <button class="btn" onclick="signGB()">SIGN IT →</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="divider">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+<div style="display:flex;justify-content:center;gap:10px;margin:16px 0;flex-wrap:wrap;">
+  <img src="https://ar-hosting.pages.dev/1771694391053.jpg" style="height:38px;">
+  <img src="https://ar-hosting.pages.dev/1771694392611.jpg" style="height:38px;">
+  <img src="https://ar-hosting.pages.dev/1771694391849.jpg" style="height:38px;">
+</div>
+<footer>
+  <div class="footer-text">
+    ★ RAMA'S CORNER ★ HOSTED ON AN OLD PHONE ★<br>
+    MADE WITH RAW HTML &amp; FEELINGS<br>
+    <a href="https://soundcloud.com/lilramahaa" target="_blank">soundcloud</a> ·
+    <a href="https://www.instagram.com/ramasenpaii" target="_blank">instagram</a><br><br>
+    <span style="font-size:13px;color:#2a2a2a;">© <span id="yr"></span> lilramahaa — no rights reserved, share everything</span>
+  </div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  DATA LAYER — reads from localStorage (set by admin panel)
+// ═══════════════════════════════════════════════════════
+function getData(key, fallback) {
+  try {
+    const raw = localStorage.getItem('rama_' + key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch(e) { return fallback; }
+}
+function setData(key, val) {
+  localStorage.setItem('rama_' + key, JSON.stringify(val));
+}
+
+// ───── year ─────
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// ───── hit counter ─────
+let count = getData('hits', 42);
+document.getElementById('counter').textContent = String(count).padStart(6,'0');
+setInterval(() => {
+  if (Math.random() > 0.96) {
+    count++;
+    setData('hits', count);
+    document.getElementById('counter').textContent = String(count).padStart(6,'0');
+  }
+}, 2500);
+
+// ───── lightbox ─────
+function lb(src) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+document.getElementById('lb-close').onclick = closeLB;
+document.getElementById('lightbox').onclick = function(e) { if(e.target===this) closeLB(); };
+function closeLB() { document.getElementById('lightbox').classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeLB(); });
+
+// ───── toast ─────
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ═══════════════════════════════════════════════════════
+//  FINDS (Today's Finds + Archive)
+// ═══════════════════════════════════════════════════════
+const DEFAULT_FINDS = [
+  {
+    id: 'def1', date: 'FEB 21, 2025', type: 'music', title: 'Add your track here',
+    img: 'https://vault.pictures/media/images/22/aa/87/22aa87f14a30480982aa6d7fdc62b24d.jpg',
+    desc: 'This is where you write what you found today — what made you feel something, why it hit different, where you heard it first.',
+    link: 'https://soundcloud.com/lilramahaa', linkText: '→ LISTEN ON SOUNDCLOUD'
+  },
+  {
+    id: 'def2', date: 'FEB 21, 2025', type: 'art', title: 'Add your art find here',
+    img: 'https://vault.pictures/media/images/c4/02/19/c4021967fd364a1eacd6ff708fd70ec1.jpg',
+    desc: 'An image, a painting, something visual that stopped you. Write what you saw in it. Why it\'s here. What it made you think about.',
+    link: '#', linkText: '→ VIEW SOURCE'
+  },
+  {
+    id: 'def3', date: 'FEB 20, 2025', type: 'music', title: 'Yesterday\'s find goes here',
+    img: 'https://vault.pictures/media/images/f2/fa/8f/f2fa8f7f90494d79bcfcbc957558a52d.jpg',
+    desc: 'Keep stacking entries above. The older ones fall down. This becomes a living archive of everything you\'ve been into.',
+    link: '#', linkText: '→ LISTEN'
+  }
+];
+
+function renderFinds() {
+  const finds = getData('finds', DEFAULT_FINDS);
+  const list = document.getElementById('finds-list');
+  if (!finds.length) {
+    list.innerHTML = '<p style="font-size:13px;color:#555;font-style:italic;">nothing posted yet today...</p>';
+    return;
+  }
+  list.innerHTML = finds.map(f => `
+    <div class="find-entry" id="find-${f.id}">
+      <div class="find-header">
+        <span class="find-date">${f.date||''}</span>
+        <span class="find-type ${f.type||'music'}">${(f.type||'music').toUpperCase()}</span>
+      </div>
+      <div class="find-title">${f.title||''}</div>
+      ${f.img ? `<img class="find-img" src="${f.img}" alt="" onclick="lb(this.src)">` : ''}
+      <div class="find-desc">${f.desc||''}</div>
+      ${f.link ? `<a href="${f.link}" class="find-link" target="_blank">${f.linkText||'→ VIEW'}</a>` : ''}
+    </div>
+  `).join('');
+  renderArchive(finds);
+}
+
+function renderArchive(finds) {
+  const arc = document.getElementById('archive-content');
+  if (!finds || finds.length < 3) {
+    arc.innerHTML = '<p style="font-size:13px;color:#555;font-style:italic;line-height:1.8;">every daily find will be catalogued here by month.<br><span class="blink" style="color:var(--lime)">█</span> loading history...</p>';
+    return;
+  }
+  // group by month
+  const groups = {};
+  finds.forEach(f => {
+    const key = f.date ? f.date.substring(0, f.date.lastIndexOf(' ')) : 'UNKNOWN';
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(f);
+  });
+  arc.innerHTML = Object.entries(groups).map(([month, entries]) => `
+    <div class="archive-month">
+      <div class="archive-month-title">◈ ${month}</div>
+      ${entries.map(e => `
+        <a class="archive-entry-link" href="${e.link||'#'}" target="_blank">
+          <span class="ae-date">${e.date||''}</span>
+          <span class="ae-type ${e.type||'music'}">${(e.type||'music').toUpperCase()}</span>
+          <span class="ae-title">${e.title||''}</span>
+        </a>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+renderFinds();
+
+// ═══════════════════════════════════════════════════════
+//  BLOG
+// ═══════════════════════════════════════════════════════
+const DEFAULT_BLOG = [
+  {
+    id: 'blog1',
+    date: 'FEB 21, 2025',
+    title: 'Welcome to the blog',
+    cover: '',
+    tags: ['update', 'personal'],
+    body: 'this is where longer thoughts go. daily finds are quick — a track, an image, a feeling. but sometimes you need more space to talk about something.<br><br>this blog is for that. write about the music scene, about what you\'re working on, about whatever keeps you up at night.<br><br><strong>raw HTML works here.</strong> make it yours.',
+    createdAt: Date.now()
+  }
+];
+
+function renderBlog() {
+  const posts = getData('blog_posts', DEFAULT_BLOG);
+  const list = document.getElementById('blog-list');
+  if (!posts.length) {
+    list.innerHTML = '<p style="font-size:13px;color:#555;font-style:italic;">no blog posts yet...</p>';
+    return;
+  }
+  list.innerHTML = posts.map(p => {
+    const isLong = p.body && p.body.length > 500;
+    return `
+      <div class="blog-post" id="blog-${p.id}">
+        <div class="blog-date">${p.date || ''}</div>
+        <div class="blog-title">${p.title || ''}</div>
+        ${p.cover ? `<img class="blog-cover" src="${p.cover}" alt="" onclick="lb(this.src)">` : ''}
+        ${p.tags && p.tags.length ? `<div class="blog-tags">${p.tags.map(t => `<span class="blog-tag">${t.toUpperCase()}</span>`).join('')}</div>` : ''}
+        <div class="blog-body ${isLong ? 'collapsed' : ''}" id="blog-body-${p.id}">${p.body || ''}</div>
+        ${isLong ? `<button class="blog-read-more" onclick="toggleBlogPost('${p.id}')">→ READ MORE</button>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleBlogPost(id) {
+  const body = document.getElementById('blog-body-' + id);
+  const btn = body.nextElementSibling;
+  if (body.classList.contains('collapsed')) {
+    body.classList.remove('collapsed');
+    btn.textContent = '→ COLLAPSE';
+  } else {
+    body.classList.add('collapsed');
+    btn.textContent = '→ READ MORE';
+  }
+}
+
+renderBlog();
+
+// ═══════════════════════════════════════════════════════
+//  NOW PLAYING (sidebar)
+// ═══════════════════════════════════════════════════════
+function renderNowPlaying() {
+  const np = getData('now_playing', null);
+  if (np) {
+    if (np.img) document.getElementById('now-playing-img').src = np.img;
+    if (np.text) document.getElementById('now-playing-text').innerHTML = '♪ ' + np.text.replace(/\n/g,'<br>');
+  }
+}
+renderNowPlaying();
+
+// ═══════════════════════════════════════════════════════
+//  STATUS ITEMS
+// ═══════════════════════════════════════════════════════
+function renderStatus() {
+  const items = getData('status_items', null);
+  if (!items) return;
+  const colors = ['dl','dh','dc','dl'];
+  document.getElementById('status-list').innerHTML = items.map((s,i) => `
+    <div class="status-item"><span class="${colors[i%colors.length]}">●</span><span>${s}</span></div>
+  `).join('');
+}
+renderStatus();
+
+// ═══════════════════════════════════════════════════════
+//  MARQUEE TEXT
+// ═══════════════════════════════════════════════════════
+function renderMarquee() {
+  const txt = getData('marquee', null);
+  if (txt) document.getElementById('marquee-text').innerHTML = txt;
+}
+renderMarquee();
+
+// ═══════════════════════════════════════════════════════
+//  GALLERY (extra images from admin)
+// ═══════════════════════════════════════════════════════
+function renderGallery() {
+  const extras = getData('gallery_extra', []);
+  if (!extras.length) return;
+  const grid = document.getElementById('gallery-grid');
+  extras.forEach(src => {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = '';
+    img.onclick = () => lb(src);
+    grid.appendChild(img);
+  });
+}
+renderGallery();
+
+// ═══════════════════════════════════════════════════════
+//  ABOUT TEXT
+// ═══════════════════════════════════════════════════════
+function renderAbout() {
+  const txt = getData('about_text', null);
+  if (txt) document.getElementById('about-text').innerHTML = txt;
+}
+renderAbout();
+
+// ═══════════════════════════════════════════════════════
+//  SUGGESTIONS (auto-delete after 48h)
+// ═══════════════════════════════════════════════════════
+const SUGG_TTL = 48 * 60 * 60 * 1000; // 48 hours in ms
+
+function getSuggs() {
+  let suggs = getData('suggestions', []);
+  const now = Date.now();
+  // prune expired
+  const fresh = suggs.filter(s => (now - s.createdAt) < SUGG_TTL);
+  if (fresh.length !== suggs.length) setData('suggestions', fresh);
+  return fresh;
+}
+
+function renderSuggs() {
+  const suggs = getSuggs();
+  const list = document.getElementById('sugg-list');
+  if (!suggs.length) {
+    list.innerHTML = '<p style="font-size:12px;color:#333;font-style:italic;margin-bottom:10px;">no suggestions yet. be first. ↓</p>';
+    return;
+  }
+  const now = Date.now();
+  list.innerHTML = suggs.map(s => {
+    const age = now - s.createdAt;
+    const pct = Math.max(0, 100 - (age / SUGG_TTL * 100));
+    const hrsLeft = Math.max(0, Math.round((SUGG_TTL - age) / 3600000));
+    return `
+      <div class="sugg-item" id="sugg-${s.id}">
+        <span class="sugg-type-badge ${s.type||'music'}">${(s.type||'music').toUpperCase()}</span>
+        <div class="sugg-content">
+          <div class="sugg-title">${s.title||'untitled'}</div>
+          <div class="sugg-by">suggested by ${s.name||'anonymous'}</div>
+          ${s.note ? `<div class="sugg-note">${s.note}</div>` : ''}
+          ${s.link ? `<a href="${s.link}" class="sugg-link" target="_blank">→ OPEN LINK</a>` : ''}
+          <div class="sugg-meta">⏱ expires in ${hrsLeft}h · ${s.votes||0} ♥</div>
+        </div>
+        <div>
+          <button class="vote-btn" onclick="voteSugg('${s.id}')">♥</button>
+        </div>
+        <div class="sugg-expire-bar" style="width:${pct}%"></div>
+      </div>
+    `;
+  }).join('');
+}
+
+function submitSugg() {
+  const name = document.getElementById('sugg-name').value.trim() || 'anonymous';
+  const type = document.getElementById('sugg-type').value;
+  const title = document.getElementById('sugg-title').value.trim();
+  const link = document.getElementById('sugg-link').value.trim();
+  const note = document.getElementById('sugg-note').value.trim();
+  if (!title) { toast('add a title first!'); return; }
+
+  const suggs = getSuggs();
+  suggs.unshift({
+    id: Date.now().toString(36),
+    name: name.substring(0,30).replace(/[<>&"]/g,''),
+    type,
+    title: title.substring(0,80).replace(/[<>&]/g,''),
+    link,
+    note: note.substring(0,200).replace(/[<>&]/g,''),
+    votes: 0,
+    createdAt: Date.now()
+  });
+  setData('suggestions', suggs);
+  renderSuggs();
+  // clear form
+  document.getElementById('sugg-name').value = '';
+  document.getElementById('sugg-title').value = '';
+  document.getElementById('sugg-link').value = '';
+  document.getElementById('sugg-note').value = '';
+  toast('suggestion sent! auto-deletes in 48h ♥');
+}
+
+function voteSugg(id) {
+  const voted = getData('voted_suggs', []);
+  if (voted.includes(id)) { toast('already voted!'); return; }
+  const suggs = getSuggs();
+  const s = suggs.find(x => x.id === id);
+  if (s) {
+    s.votes = (s.votes||0) + 1;
+    setData('suggestions', suggs);
+    voted.push(id);
+    setData('voted_suggs', voted);
+    renderSuggs();
+    toast('♥ voted!');
+  }
+}
+
+renderSuggs();
+// refresh expire bars every 30s
+setInterval(renderSuggs, 30000);
+
+// ═══════════════════════════════════════════════════════
+//  GUESTBOOK
+// ═══════════════════════════════════════════════════════
+const DEFAULT_GB = [
+  { name: 'ANONYMOUS_001', msg: 'found this site randomly. love what you\'re doing here. keep posting daily.', date: '02.19.2025 — 23:41' },
+  { name: 'INTERNET_WANDERER', msg: 'your soundcloud is fire btw', date: '02.18.2025 — 14:07' }
+];
+
+function renderGB() {
+  const entries = getData('guestbook', DEFAULT_GB);
+  const list = document.getElementById('gb-list');
+  list.innerHTML = entries.map(e => `
+    <div class="gb-entry">
+      <div class="gb-name">${e.name}</div>
+      <div class="gb-msg">${e.msg}</div>
+      <div class="gb-date">${e.date}</div>
+    </div>
+  `).join('');
+}
+
+function signGB() {
+  const name = document.getElementById('gb-name').value.trim() || 'anonymous';
+  const msg  = document.getElementById('gb-msg').value.trim();
+  if (!msg) return;
+  const now = new Date();
+  const d = `${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}.${now.getFullYear()} — ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const entries = getData('guestbook', DEFAULT_GB);
+  entries.unshift({
+    name: name.toUpperCase().replace(/[<>&"]/g,'').substring(0,30),
+    msg: msg.replace(/[<>&]/g,'').substring(0,300),
+    date: d
+  });
+  setData('guestbook', entries);
+  renderGB();
+  document.getElementById('gb-name').value = '';
+  document.getElementById('gb-msg').value  = '';
+  toast('message left ✓');
+}
+
+renderGB();
+
+// ═══════════════════════════════════════════════════════
+//  LISTEN FOR STORAGE CHANGES (admin panel updates)
+// ═══════════════════════════════════════════════════════
+window.addEventListener('storage', () => {
+  renderFinds();
+  renderBlog();
+  renderNowPlaying();
+  renderStatus();
+  renderMarquee();
+  renderAbout();
+  renderGallery();
+  renderGB();
+  renderSuggs();
+});
+</script>
+
+</body>
+</html>

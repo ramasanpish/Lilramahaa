@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADMIN — RAMA'S CORNER</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root {
+  --lime: #b8ff00;
+  --hot: #ff2d78;
+  --cyan: #00ffe7;
+  --purple: #9b00ff;
+  --bg: #060606;
+  --panel: #0d0d0d;
+  --border: rgba(184,255,0,0.2);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  font-family: 'Courier Prime', monospace;
+  color: #ccc;
+  min-height: 100vh;
+}
+
+/* ── LOGIN SCREEN ── */
+#login-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.login-box {
+  border: 2px solid var(--lime);
+  padding: 36px 32px;
+  width: 320px;
+  background: var(--panel);
+  position: relative;
+}
+.login-box::after {
+  content:'';
+  position:absolute;
+  top:5px;left:5px;right:-5px;bottom:-5px;
+  border:1px solid rgba(184,255,0,0.1);
+  z-index:-1;
+}
+.login-title {
+  font-family:'VT323',monospace;
+  font-size:38px;
+  color:var(--lime);
+  text-align:center;
+  letter-spacing:4px;
+  margin-bottom:6px;
+}
+.login-sub {
+  font-family:'Press Start 2P',monospace;
+  font-size:6px;
+  color:#333;
+  text-align:center;
+  letter-spacing:2px;
+  margin-bottom:24px;
+}
+.login-box input {
+  width:100%;
+  background:#050505;
+  border:1px solid var(--lime);
+  color:var(--lime);
+  padding:10px;
+  font-family:'Courier Prime',monospace;
+  font-size:16px;
+  outline:none;
+  margin-bottom:14px;
+  letter-spacing:3px;
+  text-align:center;
+}
+.login-box input:focus { border-color:var(--hot); }
+.login-err { font-family:'Press Start 2P',monospace;font-size:6px;color:var(--hot);text-align:center;margin-bottom:10px;display:none; }
+
+/* ── ADMIN LAYOUT ── */
+#admin-app { display:none; min-height:100vh; }
+
+.admin-header {
+  background: #000;
+  border-bottom: 2px solid var(--lime);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.admin-logo {
+  font-family:'VT323',monospace;
+  font-size:32px;
+  color:var(--lime);
+  letter-spacing:4px;
+}
+.admin-logo span { color:var(--hot); }
+
+.admin-tabs {
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.tab-btn {
+  font-family:'Press Start 2P',monospace;
+  font-size:6px;
+  padding:7px 11px;
+  cursor:pointer;
+  letter-spacing:1px;
+  border:2px solid #333;
+  background:transparent;
+  color:#666;
+  transition:all 0.1s;
+}
+.tab-btn:hover { border-color:var(--lime); color:var(--lime); }
+.tab-btn.active { background:var(--lime); color:#000; border-color:var(--lime); }
+
+.logout-btn {
+  font-family:'Press Start 2P',monospace;
+  font-size:6px;
+  padding:7px 11px;
+  cursor:pointer;
+  border:2px solid var(--hot);
+  background:transparent;
+  color:var(--hot);
+  transition:all 0.1s;
+}
+.logout-btn:hover { background:var(--hot); color:#fff; }
+
+/* ── PANELS ── */
+.admin-body { padding:24px; max-width:860px; margin:0 auto; }
+
+.panel { display:none; }
+.panel.active { display:block; }
+
+.panel-title {
+  font-family:'VT323',monospace;
+  font-size:34px;
+  color:var(--lime);
+  letter-spacing:3px;
+  margin-bottom:18px;
+  padding-bottom:10px;
+  border-bottom:1px dashed rgba(184,255,0,0.2);
+}
+
+.card {
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:18px;
+  margin-bottom:18px;
+  position:relative;
+}
+.card-title {
+  font-family:'Press Start 2P',monospace;
+  font-size:7px;
+  color:var(--hot);
+  margin-bottom:14px;
+  letter-spacing:1px;
+}
+
+label {
+  font-family:'Press Start 2P',monospace;
+  font-size:6px;
+  color:#666;
+  display:block;
+  margin-bottom:6px;
+  letter-spacing:1px;
+}
+
+input[type=text], input[type=password], input[type=url], textarea, select {
+  width:100%;
+  background:#050505;
+  border:1px solid rgba(184,255,0,0.3);
+  color:#ddd;
+  padding:9px;
+  font-family:'Courier Prime',monospace;
+  font-size:13px;
+  margin-bottom:14px;
+  outline:none;
+  resize:vertical;
+}
+input:focus, textarea:focus, select:focus { border-color:var(--cyan); }
+select option { background:#111; }
+
+.row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.row3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+@media(max-width:580px){ .row,.row3{grid-template-columns:1fr;} }
+
+.btn {
+  font-family:'Press Start 2P',monospace;
+  font-size:7px;
+  background:var(--lime);
+  color:#000;
+  border:2px solid #000;
+  box-shadow:3px 3px 0 #000;
+  padding:9px 14px;
+  cursor:pointer;
+  letter-spacing:1px;
+  transition:all 0.1s;
+  margin-right:8px;
+  margin-bottom:8px;
+}
+.btn:hover { background:var(--hot);color:#fff;transform:translate(-1px,-1px);box-shadow:4px 4px 0 #000; }
+.btn-danger { background:var(--hot);color:#fff; }
+.btn-danger:hover { background:#cc0044; }
+.btn-sm { font-size:5px;padding:6px 9px; }
+.btn-cyan { background:var(--cyan);color:#000; }
+.btn-cyan:hover { background:#00ccbb;color:#000; }
+.btn-purple { background:var(--purple);color:#fff; }
+.btn-purple:hover { background:#7700cc;color:#fff; }
+
+.tag {
+  font-family:'Press Start 2P',monospace;
+  font-size:5px;
+  padding:3px 7px;
+  margin-right:4px;
+  display:inline-block;
+}
+.tag.music { background:var(--purple);color:#fff; }
+.tag.art { background:var(--cyan);color:#000; }
+.tag.playlist { background:var(--hot);color:#fff; }
+.tag.other { background:#333;color:var(--lime); }
+
+/* ── ITEM LISTS ── */
+.item-list { list-style:none; }
+.item-row {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:10px;
+  border:1px solid rgba(255,255,255,0.04);
+  margin-bottom:6px;
+  background:rgba(0,0,0,0.4);
+}
+.item-row:hover { border-color:rgba(184,255,0,0.15); }
+.item-thumb {
+  width:54px;
+  height:54px;
+  object-fit:cover;
+  border:1px solid rgba(184,255,0,0.15);
+  flex-shrink:0;
+}
+.item-info { flex:1; }
+.item-title { font-family:'VT323',monospace;font-size:20px;color:var(--lime);line-height:1.1; }
+.item-sub { font-size:11px;color:#555;margin-top:3px; }
+.item-actions { display:flex;gap:6px;flex-wrap:wrap;margin-top:6px; }
+
+/* ── SUGGESTIONS PANEL ── */
+.sugg-admin-row {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:10px;
+  border:1px solid rgba(0,255,231,0.1);
+  margin-bottom:8px;
+  background:rgba(0,0,0,0.4);
+}
+.sugg-admin-info { flex:1; }
+.sugg-admin-title { font-family:'VT323',monospace;font-size:20px;color:var(--cyan);line-height:1.1; }
+.sugg-admin-meta { font-size:11px;color:#444;margin-top:3px; }
+
+/* ── TOAST ── */
+#admin-toast {
+  position:fixed;
+  bottom:22px;right:22px;
+  background:var(--lime);color:#000;
+  font-family:'Press Start 2P',monospace;font-size:7px;
+  padding:11px 14px;border:2px solid #000;box-shadow:3px 3px 0 #000;
+  z-index:9999;display:none;
+  max-width:240px;line-height:1.6;letter-spacing:1px;
+}
+#admin-toast.show { display:block;animation:slideUp 0.3s ease; }
+@keyframes slideUp{ from{transform:translateY(15px);opacity:0} to{transform:none;opacity:1} }
+
+/* ── PREVIEW LINK ── */
+.preview-bar {
+  background:#0a0a0a;
+  border:1px dashed rgba(184,255,0,0.15);
+  padding:10px 14px;
+  margin-bottom:18px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.preview-bar span { font-size:12px;color:#444; }
+.preview-bar a { font-family:'VT323',monospace;font-size:20px;color:var(--cyan);text-decoration:none; }
+.preview-bar a:hover { color:var(--hot); }
+
+/* blink */
+.blink { animation:blink 1s step-end infinite; }
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-title">ADMIN</div>
+    <div class="login-sub">★ RAMA'S CORNER PANEL ★</div>
+    <input type="password" id="pw-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="login-err" id="login-err">WRONG PASSWORD</div>
+    <button class="btn" style="width:100%;text-align:center;" onclick="doLogin()">ENTER →</button>
+  </div>
+</div>
+
+<!-- ── ADMIN APP ── -->
+<div id="admin-app">
+
+  <div class="admin-header">
+    <div class="admin-logo">RAMA<span>'S</span> ADMIN</div>
+    <div class="admin-tabs" id="tabs">
+      <button class="tab-btn active" onclick="showTab('finds')"       >FINDS</button>
+      <button class="tab-btn"        onclick="showTab('blog')"        >BLOG</button>
+      <button class="tab-btn"        onclick="showTab('gallery')"     >GALLERY</button>
+      <button class="tab-btn"        onclick="showTab('suggestions')" >SUGGESTIONS</button>
+      <button class="tab-btn"        onclick="showTab('guestbook')"   >GUESTBOOK</button>
+      <button class="tab-btn"        onclick="showTab('sidebar')"     >SIDEBAR</button>
+      <button class="tab-btn"        onclick="showTab('site')"        >SITE SETTINGS</button>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">LOGOUT ✕</button>
+  </div>
+
+  <div class="admin-body">
+
+    <div class="preview-bar">
+      <span>SITE PREVIEW:</span>
+      <a href="index.html" target="_blank">→ open index.html in new tab</a>
+      <span style="font-size:11px;color:#333;">changes save live to localStorage</span>
+    </div>
+
+    <!-- ══ FINDS ══ -->
+    <div class="panel active" id="panel-finds">
+      <div class="panel-title">★ TODAY'S FINDS</div>
+
+      <div class="card">
+        <div class="card-title">ADD NEW FIND</div>
+        <div class="row">
+          <div>
+            <label>TYPE</label>
+            <select id="f-type">
+              <option value="music">MUSIC</option>
+              <option value="art">ART</option>
+              <option value="playlist">PLAYLIST</option>
+              <option value="other">OTHER</option>
+            </select>
+          </div>
+          <div>
+            <label>DATE LABEL</label>
+            <input type="text" id="f-date" placeholder="FEB 21, 2025">
+          </div>
+        </div>
+        <label>TITLE</label>
+        <input type="text" id="f-title" placeholder="track name / artist / artwork title...">
+        <label>IMAGE URL</label>
+        <input type="text" id="f-img" placeholder="https://...">
+        <label>DESCRIPTION</label>
+        <textarea id="f-desc" placeholder="what did it make you feel? why is it here?" rows="3"></textarea>
+        <div class="row">
+          <div>
+            <label>LINK URL</label>
+            <input type="text" id="f-link" placeholder="https://soundcloud.com/...">
+          </div>
+          <div>
+            <label>LINK TEXT</label>
+            <input type="text" id="f-link-text" placeholder="→ LISTEN ON SOUNDCLOUD">
+          </div>
+        </div>
+        <button class="btn" onclick="addFind()">+ ADD FIND</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">CURRENT FINDS <span style="color:#333;font-size:5px;" id="finds-count"></span></div>
+        <ul class="item-list" id="admin-finds-list"></ul>
+      </div>
+    </div>
+
+    <!-- ══ BLOG ══ -->
+    <div class="panel" id="panel-blog">
+      <div class="panel-title">★ BLOG POSTS</div>
+
+      <div class="card">
+        <div class="card-title">WRITE NEW POST</div>
+        <label>TITLE</label>
+        <input type="text" id="b-title" placeholder="post title...">
+        <div class="row">
+          <div>
+            <label>DATE LABEL</label>
+            <input type="text" id="b-date" placeholder="FEB 21, 2025">
+          </div>
+          <div>
+            <label>TAGS (comma separated)</label>
+            <input type="text" id="b-tags" placeholder="personal, music, update">
+          </div>
+        </div>
+        <label>COVER IMAGE URL (optional)</label>
+        <input type="text" id="b-cover" placeholder="https://...">
+        <label>BODY (HTML allowed: &lt;strong&gt;, &lt;br&gt;, &lt;a&gt;, &lt;blockquote&gt;, &lt;p&gt;)</label>
+        <textarea id="b-body" rows="10" placeholder="write your blog post here... HTML is supported for rich formatting."></textarea>
+        <button class="btn" onclick="addBlogPost()">+ PUBLISH POST</button>
+      </div>
+
+      <div class="card" id="blog-edit-card" style="display:none;">
+        <div class="card-title">EDIT POST</div>
+        <input type="hidden" id="b-edit-id">
+        <label>TITLE</label>
+        <input type="text" id="b-edit-title" placeholder="post title...">
+        <div class="row">
+          <div>
+            <label>DATE LABEL</label>
+            <input type="text" id="b-edit-date" placeholder="FEB 21, 2025">
+          </div>
+          <div>
+            <label>TAGS (comma separated)</label>
+            <input type="text" id="b-edit-tags" placeholder="personal, music, update">
+          </div>
+        </div>
+        <label>COVER IMAGE URL (optional)</label>
+        <input type="text" id="b-edit-cover" placeholder="https://...">
+        <label>BODY</label>
+        <textarea id="b-edit-body" rows="10"></textarea>
+        <button class="btn" onclick="saveBlogEdit()">SAVE CHANGES</button>
+        <button class="btn btn-danger" onclick="cancelBlogEdit()">CANCEL</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">ALL POSTS <span style="color:#333;font-size:5px;" id="blog-count"></span></div>
+        <ul class="item-list" id="admin-blog-list"></ul>
+      </div>
+    </div>
+
+    <!-- ══ GALLERY ══ -->
+    <div class="panel" id="panel-gallery">
+      <div class="panel-title">★ GALLERY IMAGES</div>
+
+      <div class="card">
+        <div class="card-title">ADD IMAGE TO GALLERY</div>
+        <label>IMAGE URL</label>
+        <input type="text" id="g-url" placeholder="https://...">
+        <button class="btn" onclick="addGalleryImg()">+ ADD IMAGE</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">GALLERY IMAGES <span style="color:#333;font-size:5px;" id="gallery-count"></span></div>
+        <div id="gallery-admin-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">PHOTO STRIP (scrolling strip at top)</div>
+        <label>ADD IMAGE TO STRIP</label>
+        <input type="text" id="strip-url" placeholder="https://...">
+        <button class="btn btn-cyan" onclick="addStripImg()">+ ADD TO STRIP</button>
+        <div id="strip-admin-list" style="margin-top:10px;"></div>
+      </div>
+    </div>
+
+    <!-- ══ SUGGESTIONS ══ -->
+    <div class="panel" id="panel-suggestions">
+      <div class="panel-title">★ SUGGESTIONS FROM VISITORS</div>
+      <p style="font-size:12px;color:#555;margin-bottom:16px;font-style:italic;">suggestions auto-delete 48h after being posted. you can delete any manually.</p>
+      <div id="sugg-admin-list"></div>
+    </div>
+
+    <!-- ══ GUESTBOOK ══ -->
+    <div class="panel" id="panel-guestbook">
+      <div class="panel-title">★ GUESTBOOK MESSAGES</div>
+      <div class="card">
+        <div class="card-title">ADD MANUAL ENTRY</div>
+        <div class="row">
+          <div>
+            <label>NAME</label>
+            <input type="text" id="gb-admin-name" placeholder="VISITOR_001">
+          </div>
+          <div>
+            <label>DATE</label>
+            <input type="text" id="gb-admin-date" placeholder="02.21.2025 — 12:00">
+          </div>
+        </div>
+        <label>MESSAGE</label>
+        <textarea id="gb-admin-msg" rows="3" placeholder="message content..."></textarea>
+        <button class="btn" onclick="addGBEntry()">+ ADD ENTRY</button>
+      </div>
+      <div class="card">
+        <div class="card-title">ALL MESSAGES</div>
+        <ul class="item-list" id="gb-admin-list"></ul>
+      </div>
+    </div>
+
+    <!-- ══ SIDEBAR ══ -->
+    <div class="panel" id="panel-sidebar">
+      <div class="panel-title">★ SIDEBAR CONTENT</div>
+
+      <div class="card">
+        <div class="card-title">NOW PLAYING</div>
+        <label>IMAGE URL</label>
+        <input type="text" id="np-img" placeholder="https://...">
+        <label>TEXT (use \n for line breaks)</label>
+        <textarea id="np-text" rows="3" placeholder="♪ track name\nartist name\nyour comment"></textarea>
+        <button class="btn" onclick="saveNowPlaying()">SAVE NOW PLAYING</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">STATUS ITEMS</div>
+        <p style="font-size:11px;color:#444;margin-bottom:10px;font-style:italic;">one item per line</p>
+        <textarea id="status-ta" rows="5" placeholder="hunting for new sounds&#10;posting from an old phone&#10;making music on soundcloud&#10;@ramasenpaii on instagram"></textarea>
+        <button class="btn" onclick="saveStatus()">SAVE STATUS</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">ABOUT TEXT</div>
+        <p style="font-size:11px;color:#444;margin-bottom:10px;font-style:italic;">HTML allowed. use &lt;strong&gt;, &lt;br&gt;, &lt;a href="..."&gt; etc.</p>
+        <textarea id="about-ta" rows="8" placeholder="hey. i'm &lt;strong&gt;rama&lt;/strong&gt;..."></textarea>
+        <button class="btn" onclick="saveAbout()">SAVE ABOUT TEXT</button>
+      </div>
+    </div>
+
+    <!-- ══ SITE SETTINGS ══ -->
+    <div class="panel" id="panel-site">
+      <div class="panel-title">★ SITE SETTINGS</div>
+
+      <div class="card">
+        <div class="card-title">MARQUEE TEXT</div>
+        <p style="font-size:11px;color:#444;margin-bottom:10px;font-style:italic;">the scrolling pink banner. use ✦ as separator</p>
+        <textarea id="marquee-ta" rows="3" placeholder="✦ WELCOME TO MY CORNER ✦ MUSIC & ART POSTED DAILY ✦"></textarea>
+        <button class="btn" onclick="saveMarquee()">SAVE MARQUEE</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">CHANGE ADMIN PASSWORD</div>
+        <div class="row">
+          <div>
+            <label>NEW PASSWORD</label>
+            <input type="password" id="new-pw1" placeholder="new password">
+          </div>
+          <div>
+            <label>CONFIRM NEW PASSWORD</label>
+            <input type="password" id="new-pw2" placeholder="confirm">
+          </div>
+        </div>
+        <button class="btn" onclick="changePW()">CHANGE PASSWORD</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">DANGER ZONE</div>
+        <button class="btn btn-danger" onclick="clearSuggs()">CLEAR ALL SUGGESTIONS</button>
+        <button class="btn btn-danger" onclick="clearGB()">CLEAR ALL GUESTBOOK</button>
+        <button class="btn btn-danger" onclick="clearFinds()">CLEAR ALL FINDS</button>
+        <button class="btn btn-danger" onclick="clearBlog()">CLEAR ALL BLOG POSTS</button>
+        <p style="font-size:11px;color:#444;margin-top:10px;font-style:italic;">these actions cannot be undone.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">EXPORT / IMPORT DATA</div>
+        <button class="btn btn-cyan" onclick="exportData()">EXPORT ALL DATA (JSON)</button>
+        <label for="import-file" class="btn btn-purple" style="cursor:pointer;display:inline-block;">IMPORT DATA (JSON)</label>
+        <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importData(event)">
+        <p style="font-size:11px;color:#444;margin-top:10px;font-style:italic;">export before clearing. import overwrites all data.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="admin-toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  AUTH
+// ═══════════════════════════════════════════════════════
+const DEFAULT_PW = 'rama2025';
+
+function getStoredPW() {
+  return localStorage.getItem('rama_admin_pw') || DEFAULT_PW;
+}
+
+function doLogin() {
+  const pw = document.getElementById('pw-input').value;
+  if (pw === getStoredPW()) {
+    sessionStorage.setItem('rama_authed', '1');
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-app').style.display = 'block';
+    loadAll();
+  } else {
+    const err = document.getElementById('login-err');
+    err.style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    setTimeout(() => err.style.display='none', 2000);
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem('rama_authed');
+  location.reload();
+}
+
+function changePW() {
+  const p1 = document.getElementById('new-pw1').value;
+  const p2 = document.getElementById('new-pw2').value;
+  if (!p1) { toast('enter a new password'); return; }
+  if (p1 !== p2) { toast('passwords do not match'); return; }
+  localStorage.setItem('rama_admin_pw', p1);
+  document.getElementById('new-pw1').value = '';
+  document.getElementById('new-pw2').value = '';
+  toast('password changed ✓');
+}
+
+// auto-login if session active
+if (sessionStorage.getItem('rama_authed')) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-app').style.display = 'block';
+  document.addEventListener('DOMContentLoaded', loadAll);
+}
+
+document.getElementById('pw-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+// ═══════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════
+function getData(key, fallback) {
+  try {
+    const raw = localStorage.getItem('rama_' + key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch(e) { return fallback; }
+}
+function setData(key, val) {
+  localStorage.setItem('rama_' + key, JSON.stringify(val));
+}
+
+function toast(msg, color) {
+  const t = document.getElementById('admin-toast');
+  t.textContent = msg;
+  t.style.background = color || 'var(--lime)';
+  t.style.color = color ? '#fff' : '#000';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function fmtDate(ts) {
+  const d = new Date(ts);
+  return `${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}.${d.getFullYear()}`;
+}
+
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════
+//  LOAD ALL
+// ═══════════════════════════════════════════════════════
+function loadAll() {
+  renderAdminFinds();
+  renderAdminBlog();
+  renderAdminGallery();
+  renderAdminSuggs();
+  renderAdminGB();
+  loadSidebarFields();
+  loadSiteFields();
+}
+
+// ═══════════════════════════════════════════════════════
+//  FINDS
+// ═══════════════════════════════════════════════════════
+const DEFAULT_FINDS = [
+  {
+    id: 'def1', date: 'FEB 21, 2025', type: 'music', title: 'Add your track here',
+    img: 'https://vault.pictures/media/images/22/aa/87/22aa87f14a30480982aa6d7fdc62b24d.jpg',
+    desc: 'This is where you write what you found today.',
+    link: 'https://soundcloud.com/lilramahaa', linkText: '→ LISTEN ON SOUNDCLOUD'
+  },
+  {
+    id: 'def2', date: 'FEB 21, 2025', type: 'art', title: 'Add your art find here',
+    img: 'https://vault.pictures/media/images/c4/02/19/c4021967fd364a1eacd6ff708fd70ec1.jpg',
+    desc: 'An image, a painting, something visual that stopped you.',
+    link: '#', linkText: '→ VIEW SOURCE'
+  }
+];
+
+function addFind() {
+  const type = document.getElementById('f-type').value;
+  const date = document.getElementById('f-date').value.trim();
+  const title = document.getElementById('f-title').value.trim();
+  const img = document.getElementById('f-img').value.trim();
+  const desc = document.getElementById('f-desc').value.trim();
+  const link = document.getElementById('f-link').value.trim();
+  const linkText = document.getElementById('f-link-text').value.trim() || '→ VIEW';
+  if (!title) { toast('add a title!', 'var(--hot)'); return; }
+
+  const finds = getData('finds', DEFAULT_FINDS);
+  const now = new Date();
+  const dateLabel = date || now.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'}).toUpperCase().replace(',','');
+  finds.unshift({ id: Date.now().toString(36), date: dateLabel, type, title, img, desc, link, linkText });
+  setData('finds', finds);
+  renderAdminFinds();
+  // clear form
+  ['f-title','f-img','f-desc','f-link','f-link-text','f-date'].forEach(id => document.getElementById(id).value='');
+  toast('find added ✓');
+}
+
+function deleteFind(id) {
+  if (!confirm('delete this find?')) return;
+  let finds = getData('finds', DEFAULT_FINDS);
+  finds = finds.filter(f => f.id !== id);
+  setData('finds', finds);
+  renderAdminFinds();
+  toast('deleted', 'var(--hot)');
+}
+
+function moveFind(id, dir) {
+  let finds = getData('finds', DEFAULT_FINDS);
+  const i = finds.findIndex(f => f.id === id);
+  if (i < 0) return;
+  const j = i + dir;
+  if (j < 0 || j >= finds.length) return;
+  [finds[i], finds[j]] = [finds[j], finds[i]];
+  setData('finds', finds);
+  renderAdminFinds();
+}
+
+function renderAdminFinds() {
+  const finds = getData('finds', DEFAULT_FINDS);
+  document.getElementById('finds-count').textContent = `(${finds.length})`;
+  const ul = document.getElementById('admin-finds-list');
+  if (!finds.length) { ul.innerHTML = '<li style="color:#444;font-size:12px;padding:8px;">no finds yet</li>'; return; }
+  ul.innerHTML = finds.map((f,i) => `
+    <li class="item-row">
+      ${f.img ? `<img class="item-thumb" src="${f.img}" alt="">` : '<div class="item-thumb" style="background:#111;"></div>'}
+      <div class="item-info">
+        <div style="margin-bottom:4px;"><span class="tag ${f.type}">${f.type.toUpperCase()}</span><span style="font-family:VT323,monospace;font-size:14px;color:#444;">${f.date||''}</span></div>
+        <div class="item-title">${f.title}</div>
+        <div class="item-sub">${f.desc ? f.desc.substring(0,80)+'...' : ''}</div>
+        <div class="item-actions">
+          <button class="btn btn-sm" onclick="moveFind('${f.id}',-1)">↑</button>
+          <button class="btn btn-sm" onclick="moveFind('${f.id}',1)">↓</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteFind('${f.id}')">✕ DELETE</button>
+        </div>
+      </div>
+    </li>
+  `).join('');
+}
+
+function clearFinds() {
+  if (!confirm('clear ALL finds? cannot undo.')) return;
+  setData('finds', []);
+  renderAdminFinds();
+  toast('cleared', 'var(--hot)');
+}
+
+// ═══════════════════════════════════════════════════════
+//  BLOG
+// ═══════════════════════════════════════════════════════
+const DEFAULT_BLOG = [
+  {
+    id: 'blog1',
+    date: 'FEB 21, 2025',
+    title: 'Welcome to the blog',
+    cover: '',
+    tags: ['update', 'personal'],
+    body: 'this is where longer thoughts go. daily finds are quick — a track, an image, a feeling. but sometimes you need more space to talk about something.<br><br>this blog is for that. write about the music scene, about what you\'re working on, about whatever keeps you up at night.<br><br><strong>raw HTML works here.</strong> make it yours.',
+    createdAt: Date.now()
+  }
+];
+
+function addBlogPost() {
+  const title = document.getElementById('b-title').value.trim();
+  const date = document.getElementById('b-date').value.trim();
+  const cover = document.getElementById('b-cover').value.trim();
+  const tagsRaw = document.getElementById('b-tags').value.trim();
+  const body = document.getElementById('b-body').value.trim();
+  if (!title) { toast('add a title!', 'var(--hot)'); return; }
+  if (!body) { toast('write something!', 'var(--hot)'); return; }
+
+  const posts = getData('blog_posts', DEFAULT_BLOG);
+  const now = new Date();
+  const dateLabel = date || now.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'}).toUpperCase().replace(',','');
+  const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim().toLowerCase()).filter(Boolean) : [];
+
+  posts.unshift({
+    id: Date.now().toString(36),
+    date: dateLabel,
+    title,
+    cover,
+    tags,
+    body,
+    createdAt: Date.now()
+  });
+  setData('blog_posts', posts);
+  renderAdminBlog();
+  ['b-title','b-date','b-cover','b-tags','b-body'].forEach(id => document.getElementById(id).value='');
+  toast('post published ✓');
+}
+
+function deleteBlogPost(id) {
+  if (!confirm('delete this blog post?')) return;
+  let posts = getData('blog_posts', DEFAULT_BLOG);
+  posts = posts.filter(p => p.id !== id);
+  setData('blog_posts', posts);
+  renderAdminBlog();
+  toast('deleted', 'var(--hot)');
+}
+
+function moveBlogPost(id, dir) {
+  let posts = getData('blog_posts', DEFAULT_BLOG);
+  const i = posts.findIndex(p => p.id === id);
+  if (i < 0) return;
+  const j = i + dir;
+  if (j < 0 || j >= posts.length) return;
+  [posts[i], posts[j]] = [posts[j], posts[i]];
+  setData('blog_posts', posts);
+  renderAdminBlog();
+}
+
+function editBlogPost(id) {
+  const posts = getData('blog_posts', DEFAULT_BLOG);
+  const p = posts.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('b-edit-id').value = p.id;
+  document.getElementById('b-edit-title').value = p.title || '';
+  document.getElementById('b-edit-date').value = p.date || '';
+  document.getElementById('b-edit-cover').value = p.cover || '';
+  document.getElementById('b-edit-tags').value = (p.tags || []).join(', ');
+  document.getElementById('b-edit-body').value = p.body || '';
+  document.getElementById('blog-edit-card').style.display = 'block';
+  document.getElementById('blog-edit-card').scrollIntoView({ behavior: 'smooth' });
+}
+
+function saveBlogEdit() {
+  const id = document.getElementById('b-edit-id').value;
+  const title = document.getElementById('b-edit-title').value.trim();
+  const date = document.getElementById('b-edit-date').value.trim();
+  const cover = document.getElementById('b-edit-cover').value.trim();
+  const tagsRaw = document.getElementById('b-edit-tags').value.trim();
+  const body = document.getElementById('b-edit-body').value.trim();
+  if (!title) { toast('add a title!', 'var(--hot)'); return; }
+
+  let posts = getData('blog_posts', DEFAULT_BLOG);
+  const p = posts.find(x => x.id === id);
+  if (!p) { toast('post not found', 'var(--hot)'); return; }
+
+  p.title = title;
+  p.date = date;
+  p.cover = cover;
+  p.tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim().toLowerCase()).filter(Boolean) : [];
+  p.body = body;
+
+  setData('blog_posts', posts);
+  renderAdminBlog();
+  cancelBlogEdit();
+  toast('post updated ✓');
+}
+
+function cancelBlogEdit() {
+  document.getElementById('blog-edit-card').style.display = 'none';
+  ['b-edit-id','b-edit-title','b-edit-date','b-edit-cover','b-edit-tags','b-edit-body'].forEach(id => document.getElementById(id).value='');
+}
+
+function clearBlog() {
+  if (!confirm('clear ALL blog posts? cannot undo.')) return;
+  setData('blog_posts', []);
+  renderAdminBlog();
+  toast('cleared', 'var(--hot)');
+}
+
+function renderAdminBlog() {
+  const posts = getData('blog_posts', DEFAULT_BLOG);
+  document.getElementById('blog-count').textContent = `(${posts.length})`;
+  const ul = document.getElementById('admin-blog-list');
+  if (!posts.length) { ul.innerHTML = '<li style="color:#444;font-size:12px;padding:8px;">no blog posts yet</li>'; return; }
+  ul.innerHTML = posts.map((p,i) => `
+    <li class="item-row">
+      ${p.cover ? `<img class="item-thumb" src="${p.cover}" alt="">` : '<div class="item-thumb" style="background:#111;display:flex;align-items:center;justify-content:center;font-family:VT323,monospace;font-size:16px;color:#333;">BLOG</div>'}
+      <div class="item-info">
+        <div style="margin-bottom:4px;">
+          <span style="font-family:VT323,monospace;font-size:14px;color:#444;">${p.date||''}</span>
+          ${p.tags && p.tags.length ? p.tags.map(t => `<span class="tag other" style="font-size:4px;">${t.toUpperCase()}</span>`).join('') : ''}
+        </div>
+        <div class="item-title">${p.title}</div>
+        <div class="item-sub">${p.body ? p.body.replace(/<[^>]*>/g,'').substring(0,100)+'...' : ''}</div>
+        <div class="item-actions">
+          <button class="btn btn-sm" onclick="moveBlogPost('${p.id}',-1)">↑</button>
+          <button class="btn btn-sm" onclick="moveBlogPost('${p.id}',1)">↓</button>
+          <button class="btn btn-sm btn-cyan" onclick="editBlogPost('${p.id}')">✎ EDIT</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteBlogPost('${p.id}')">✕ DELETE</button>
+        </div>
+      </div>
+    </li>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  GALLERY
+// ═══════════════════════════════════════════════════════
+function addGalleryImg() {
+  const url = document.getElementById('g-url').value.trim();
+  if (!url) return;
+  const imgs = getData('gallery_extra', []);
+  imgs.push(url);
+  setData('gallery_extra', imgs);
+  document.getElementById('g-url').value = '';
+  renderAdminGallery();
+  toast('image added ✓');
+}
+
+function deleteGalleryImg(i) {
+  const imgs = getData('gallery_extra', []);
+  imgs.splice(i, 1);
+  setData('gallery_extra', imgs);
+  renderAdminGallery();
+  toast('removed', 'var(--hot)');
+}
+
+function addStripImg() {
+  const url = document.getElementById('strip-url').value.trim();
+  if (!url) return;
+  const imgs = getData('strip_extra', []);
+  imgs.push(url);
+  setData('strip_extra', imgs);
+  document.getElementById('strip-url').value = '';
+  renderAdminGallery();
+  toast('added to strip ✓');
+}
+
+function renderAdminGallery() {
+  const imgs = getData('gallery_extra', []);
+  document.getElementById('gallery-count').textContent = `(${imgs.length} extra)`;
+  const grid = document.getElementById('gallery-admin-grid');
+  if (!imgs.length) { grid.innerHTML = '<p style="font-size:12px;color:#444;">no extra images added yet.</p>'; return; }
+  grid.innerHTML = imgs.map((src,i) => `
+    <div style="position:relative;">
+      <img src="${src}" style="width:100%;height:80px;object-fit:cover;border:1px solid rgba(184,255,0,0.15);display:block;">
+      <button onclick="deleteGalleryImg(${i})" style="position:absolute;top:2px;right:2px;background:var(--hot);color:#fff;border:none;cursor:pointer;font-family:'Press Start 2P',monospace;font-size:6px;padding:3px 5px;">✕</button>
+    </div>
+  `).join('');
+
+  const strip = getData('strip_extra', []);
+  const sl = document.getElementById('strip-admin-list');
+  if (!strip.length) { sl.innerHTML = '<p style="font-size:12px;color:#444;">no extra strip images.</p>'; return; }
+  sl.innerHTML = strip.map((src,i) => `
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;border:1px solid rgba(255,255,255,0.05);padding:6px;">
+      <img src="${src}" style="height:40px;width:60px;object-fit:cover;">
+      <span style="font-size:11px;color:#555;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${src}</span>
+      <button onclick="deleteStripImg(${i})" class="btn btn-sm btn-danger">✕</button>
+    </div>
+  `).join('');
+}
+
+function deleteStripImg(i) {
+  const imgs = getData('strip_extra', []);
+  imgs.splice(i,1);
+  setData('strip_extra', imgs);
+  renderAdminGallery();
+  toast('removed', 'var(--hot)');
+}
+
+// ═══════════════════════════════════════════════════════
+//  SUGGESTIONS
+// ═══════════════════════════════════════════════════════
+const SUGG_TTL = 48 * 60 * 60 * 1000;
+
+function getSuggs() {
+  let suggs = getData('suggestions', []);
+  const now = Date.now();
+  const fresh = suggs.filter(s => (now - s.createdAt) < SUGG_TTL);
+  if (fresh.length !== suggs.length) setData('suggestions', fresh);
+  return fresh;
+}
+
+function deleteSugg(id) {
+  let suggs = getData('suggestions', []);
+  suggs = suggs.filter(s => s.id !== id);
+  setData('suggestions', suggs);
+  renderAdminSuggs();
+  toast('deleted', 'var(--hot)');
+}
+
+function approveSugg(id) {
+  // promote to find
+  const suggs = getSuggs();
+  const s = suggs.find(x => x.id === id);
+  if (!s) return;
+  const finds = getData('finds', DEFAULT_FINDS);
+  const now = new Date();
+  const dateLabel = now.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'}).toUpperCase().replace(',','');
+  finds.unshift({
+    id: Date.now().toString(36),
+    date: dateLabel,
+    type: s.type || 'music',
+    title: s.title,
+    img: '',
+    desc: (s.note ? s.note + '\n\n' : '') + `— suggested by ${s.name||'anonymous'}`,
+    link: s.link || '',
+    linkText: '→ OPEN LINK'
+  });
+  setData('finds', finds);
+  deleteSugg(id);
+  renderAdminFinds();
+  toast('promoted to finds ✓');
+}
+
+function clearSuggs() {
+  if (!confirm('clear all suggestions?')) return;
+  setData('suggestions', []);
+  renderAdminSuggs();
+  toast('cleared', 'var(--hot)');
+}
+
+function renderAdminSuggs() {
+  const suggs = getSuggs();
+  const el = document.getElementById('sugg-admin-list');
+  if (!suggs.length) {
+    el.innerHTML = '<div class="card"><p style="font-size:12px;color:#444;font-style:italic;">no suggestions yet.</p></div>';
+    return;
+  }
+  const now = Date.now();
+  el.innerHTML = suggs.map(s => {
+    const hrsLeft = Math.max(0, Math.round((SUGG_TTL - (now - s.createdAt)) / 3600000));
+    const pct = Math.max(0, 100 - ((now - s.createdAt) / SUGG_TTL * 100));
+    return `
+      <div class="sugg-admin-row">
+        <span class="tag ${s.type||'music'}">${(s.type||'music').toUpperCase()}</span>
+        <div class="sugg-admin-info">
+          <div class="sugg-admin-title">${s.title}</div>
+          <div class="sugg-admin-meta">by ${s.name||'anon'} · ${hrsLeft}h left · ♥ ${s.votes||0} · posted ${fmtDate(s.createdAt)}</div>
+          ${s.note ? `<div style="font-size:12px;color:#888;margin-top:5px;font-style:italic;">${s.note}</div>` : ''}
+          ${s.link ? `<a href="${s.link}" target="_blank" style="font-family:'Press Start 2P',monospace;font-size:5px;color:var(--cyan);text-decoration:none;">→ OPEN LINK</a>` : ''}
+          <div style="background:#111;height:2px;margin-top:8px;"><div style="background:var(--hot);height:2px;width:${pct}%;"></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+          <button class="btn btn-sm btn-cyan" onclick="approveSugg('${s.id}')">→ ADD TO FINDS</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteSugg('${s.id}')">✕ DELETE</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  GUESTBOOK
+// ═══════════════════════════════════════════════════════
+const DEFAULT_GB = [
+  { id:'gb1', name:'ANONYMOUS_001', msg:'found this site randomly. love what you\'re doing here.', date:'02.19.2025 — 23:41' },
+  { id:'gb2', name:'INTERNET_WANDERER', msg:'your soundcloud is fire btw', date:'02.18.2025 — 14:07' }
+];
+
+function addGBEntry() {
+  const name = document.getElementById('gb-admin-name').value.trim();
+  const msg  = document.getElementById('gb-admin-msg').value.trim();
+  const date = document.getElementById('gb-admin-date').value.trim();
+  if (!msg) { toast('add a message!', 'var(--hot)'); return; }
+  const entries = getData('guestbook', DEFAULT_GB);
+  const now = new Date();
+  const d = date || `${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}.${now.getFullYear()} — ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  entries.unshift({ id: Date.now().toString(36), name: (name||'ADMIN').toUpperCase(), msg, date: d });
+  setData('guestbook', entries);
+  ['gb-admin-name','gb-admin-msg','gb-admin-date'].forEach(id => document.getElementById(id).value='');
+  renderAdminGB();
+  toast('entry added ✓');
+}
+
+function deleteGB(id) {
+  let entries = getData('guestbook', DEFAULT_GB);
+  entries = entries.filter(e => e.id !== id);
+  setData('guestbook', entries);
+  renderAdminGB();
+  toast('deleted', 'var(--hot)');
+}
+
+function clearGB() {
+  if (!confirm('clear all guestbook entries?')) return;
+  setData('guestbook', []);
+  renderAdminGB();
+  toast('cleared', 'var(--hot)');
+}
+
+function renderAdminGB() {
+  const entries = getData('guestbook', DEFAULT_GB);
+  const ul = document.getElementById('gb-admin-list');
+  if (!entries.length) { ul.innerHTML = '<li style="color:#444;font-size:12px;padding:8px;">no entries yet.</li>'; return; }
+  ul.innerHTML = entries.map(e => `
+    <li class="item-row">
+      <div class="item-info">
+        <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--lime);">${e.name||'ANON'}</div>
+        <div style="font-size:13px;color:#888;margin-top:5px;font-style:italic;">${e.msg}</div>
+        <div style="font-family:'VT323',monospace;font-size:13px;color:#333;margin-top:3px;">${e.date||''}</div>
+      </div>
+      <button class="btn btn-sm btn-danger" onclick="deleteGB('${e.id||''}')">✕</button>
+    </li>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  SIDEBAR
+// ═══════════════════════════════════════════════════════
+function loadSidebarFields() {
+  const np = getData('now_playing', null);
+  if (np) {
+    document.getElementById('np-img').value = np.img || '';
+    document.getElementById('np-text').value = np.text || '';
+  }
+  const items = getData('status_items', null);
+  if (items) document.getElementById('status-ta').value = items.join('\n');
+  const about = getData('about_text', null);
+  if (about) document.getElementById('about-ta').value = about;
+}
+
+function saveNowPlaying() {
+  const img = document.getElementById('np-img').value.trim();
+  const text = document.getElementById('np-text').value.trim();
+  setData('now_playing', { img, text });
+  toast('now playing updated ✓');
+}
+
+function saveStatus() {
+  const items = document.getElementById('status-ta').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  setData('status_items', items);
+  toast('status updated ✓');
+}
+
+function saveAbout() {
+  const txt = document.getElementById('about-ta').value;
+  setData('about_text', txt);
+  toast('about text updated ✓');
+}
+
+// ═══════════════════════════════════════════════════════
+//  SITE SETTINGS
+// ═══════════════════════════════════════════════════════
+function loadSiteFields() {
+  const m = getData('marquee', null);
+  if (m) document.getElementById('marquee-ta').value = m;
+}
+
+function saveMarquee() {
+  const txt = document.getElementById('marquee-ta').value.trim();
+  setData('marquee', txt);
+  toast('marquee updated ✓');
+}
+
+// ═══════════════════════════════════════════════════════
+//  EXPORT / IMPORT
+// ═══════════════════════════════════════════════════════
+function exportData() {
+  const keys = ['finds','blog_posts','gallery_extra','strip_extra','suggestions','guestbook','now_playing','status_items','marquee','about_text'];
+  const data = {};
+  keys.forEach(k => { data[k] = getData(k, null); });
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'rama_data_' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  toast('exported ✓');
+}
+
+function importData(evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      Object.entries(data).forEach(([k, v]) => { if (v !== null) setData(k, v); });
+      loadAll();
+      toast('imported ✓');
+    } catch(err) {
+      toast('import failed — invalid JSON', 'var(--hot)');
+    }
+  };
+  reader.readAsText(file);
+  evt.target.value = '';
+}
+
+// ═══════════════════════════════════════════════════════
+//  AUTO-REFRESH SUGGESTIONS
+// ═══════════════════════════════════════════════════════
+setInterval(() => {
+  if (document.getElementById('panel-suggestions').classList.contains('active')) {
+    renderAdminSuggs();
+  }
+}, 60000);
+</script>
+</body>
+</html>
